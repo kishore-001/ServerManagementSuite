@@ -18,6 +18,169 @@ Built with a modular architecture and robust security, SMS is ideal for universi
 
 ---
 
+## ⚙️ Installation Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/KarthickRaghul/ServerManagementSuite
+```
+
+---
+
+### 2. Install Vite
+
+#### 🪟 On Windows (CMD or PowerShell):
+
+```cmd
+npm install -g vite
+```
+
+#### 🐧 On Linux:
+
+```bash
+sudo npm install -g vite
+```
+
+---
+
+### 3. Install PostgreSQL
+
+#### 🪟 On Windows:
+
+1. Download the installer from the official site: [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)
+2. Run the installer and follow the setup wizard.
+3. Set the port (e.g., `8500`) and credentials (username and password) during installation.
+4. After installation, ensure `pgAdmin` and the PostgreSQL service are running.
+
+#### 🐧 On Linux (Debian/Ubuntu):
+
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
+
+> Optional: Change the default port or authentication settings by editing `/etc/postgresql/<version>/main/postgresql.conf` and `pg_hba.conf`.
+
+---
+
+### 4. Set Up the Environment File
+
+Create a `.env` file inside the backend directory:
+
+```
+ServerSecurityTool/backend/.env
+```
+
+Add the following content:
+
+```env
+DATABASE_URL=postgres://postgres:password@localhost:8500/SSMS?sslmode=disable
+```
+
+#### 📘 Breakdown of `DATABASE_URL`:
+
+- **postgres** → PostgreSQL **username**
+- **password** → PostgreSQL **password**
+- **localhost** → Database **host** (use IP address if PostgreSQL is on a different machine)
+- **8500** → PostgreSQL **port**
+- **SSMS** → Name of the **PostgreSQL database**
+- **sslmode=disable** → Disables SSL; suitable for local development
+
+---
+
+### 5. Run the Backend
+
+#### 🪟 On Windows (PowerShell as Administrator):
+
+```powershell
+cd ServerSecurityTool/backend
+go run main.go
+```
+
+> ⚠️ Make sure to **Run PowerShell as Administrator** to allow access to system resources.
+
+#### 🐧 On Linux:
+
+```bash
+cd ServerSecurityTool/backend
+sudo go run main.go
+```
+
+---
+
+### 6. Run the Frontend
+
+In a new terminal window:
+
+```bash
+cd ServerSecurityTool/frontend
+npm run dev -- --host
+```
+
+> This will launch the frontend and make it accessible over the local network.
+
+---
+
+## 💻 Client Setup
+
+The client tool collects system metrics and sends data to the backend.
+
+---
+
+### Option 1: Clone Client on Server Machine
+
+```bash
+git clone https://github.com/KarthickRaghul/ServerManagementSuite/tree/main/client
+cd client
+```
+
+Run the client:
+
+#### 🪟 On Windows:
+
+```powershell
+go run windows\main.go
+```
+
+> Run in PowerShell **as Administrator**.
+
+#### 🐧 On Linux:
+
+```bash
+sudo go run linux\main.go
+```
+
+---
+
+### Option 2: Build on Any Machine and Copy to Server
+
+1. Build the client:
+
+```bash
+go build -o client_tool main.go
+```
+
+2. Copy the compiled binary to your server via SCP, USB, or file transfer.
+
+3. Run on the server:
+
+#### 🐧 Linux:
+
+```bash
+sudo ./client_tool
+```
+
+#### 🪟 Windows:
+
+```powershell
+.\client_tool.exe
+```
+
+✅ Your ServerSecurityTool stack (backend, frontend, and client) is now fully set up and running.
+
+---
+
 ## 🔑 Key Features
 
 - **Centralized Dashboard:** Manage all servers from a unified portal—no more individual SSH sessions.
@@ -27,55 +190,6 @@ Built with a modular architecture and robust security, SMS is ideal for universi
 - **Role-Based Access Control:** Admin (full access) and Viewer (read-only) roles, with UI tailored to each.
 - **Secure Communication:** JWT authentication, access tokens, input validation, and encrypted protocols (HTTPS).
 - **Modular Architecture:** Easily extensible for new features and scalable to large server fleets.
-
----
-
-## 🛠️ Installation Guide
-
-### Prerequisites
-
-- Go 1.19+ (backend, client)
-- PostgreSQL (database)
-- Node.js & npm (frontend)
-- Linux or Windows servers for client agents
-
-
-### Backend Setup (Go + PostgreSQL)
-
-```bash
-git clone <repository-url>
-cd backend
-go mod download
-cp .env.example .env # Edit with your DB credentials and secrets
-go run temp/dbinit.go # Initialize database
-go run main.go # Start backend server
-```
-
-### Frontend Setup (React + Vite)
-
-```bash
-cd frontend
-npm install
-cp .env.example .env # Set backend URL
-npm run dev # Start frontend (dev mode)
-npm run build # Build for production
-```
-
-### Client Deployment (Go Agent)
-
-On each managed Linux server:
-
-```bash
-sudo ./client-executable --port 2210
-```
-
-On each managed Windows server:
-use admin powershell or command prompt to run the exe file
-
-
-
-- Registers with backend using access token
-- Collects and sends metrics every 30 seconds
 
 ---
 
